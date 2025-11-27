@@ -37,9 +37,9 @@ RUN a2enmod rewrite
 # Configure Apache to use public directory
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Expose port 10000 (Render.com uses this port)
-EXPOSE 10000
+# Expose port (Railway uses $PORT)
+EXPOSE $PORT
 
-# Start Apache on port 10000
-CMD sed -i 's/80/10000/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && apache2-foreground
+# Start Apache on the port specified by Railway
+CMD sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && apache2-foreground
 
