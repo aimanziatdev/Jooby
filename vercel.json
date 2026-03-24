@@ -1,21 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "public/index.php": {
-      "runtime": "php@8.2",
-      "memory": 1024
-    }
-  },
-  "routes": [
-    {
-      "src": "/storage/(.*)",
-      "dest": "/storage/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/index.php"
-    }
-  ],
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "false",
