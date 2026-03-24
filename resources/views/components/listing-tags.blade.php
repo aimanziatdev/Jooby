@@ -4,9 +4,12 @@
 $tags = explode(',', $tagsCsv);
 @endphp
 
-<ul class="flex">
+<ul class="flex flex-wrap gap-2">
   @foreach($tags as $tag)
-  <li class="flex items-center justify-center bg-customRed text-white rounded-xl py-1 px-3 mr-2 text-xs">    <a href="/?tag={{$tag}}">{{$tag}}</a>
+  <li>
+    <a href="/?tag={{trim($tag)}}" class="inline-flex items-center px-3 py-1 rounded-lg bg-gray-100 text-gray-600 text-xs font-semibold hover:bg-red-50 hover:text-brand-red transition-colors">
+      {{trim($tag)}}
+    </a>
   </li>
   @endforeach
 </ul>

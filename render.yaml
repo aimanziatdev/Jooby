@@ -12,3 +12,4 @@ services:
       - key: LOG_CHANNEL
         value: stderr
 
+

@@ -1,52 +1,21 @@
 <?php
-
 namespace App\Models;
-
-use App\Models\Listing;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
-{
+class User extends Authenticatable {
     use HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    // Relationship With Listings
-    public function listings(): HasMany
-    {
-        return $this->hasMany(Listing::class);
-    }
+    protected $fillable = ['name','email','password','type','company_name','bio','linkedin','portfolio','avatar','phone'];
+    protected $hidden = ['password','remember_token'];
+    protected $casts = ['email_verified_at' => 'datetime'];
+    public function listings() { return $this->hasMany(Listing::class); }
+    public function projects() { return $this->hasMany(Project::class); }
+    public function applications() { return $this->hasMany(Application::class); }
+    public function offersReceived() { return $this->hasMany(Offer::class,'to_user_id'); }
+    public function offersSent() { return $this->hasMany(Offer::class,'from_user_id'); }
+    public function isCompany() { return $this->type === 'company'; }
+    public function isPerson() { return $this->type === 'person'; }
+    public function displayName() { return $this->isCompany() ? $this->company_name : $this->name; }
 }

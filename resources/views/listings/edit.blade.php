@@ -1,99 +1,189 @@
 @extends('Layout')
 
 @section('content')
-<div class="bg-gray-50 border border-gray-200 p-10 rounded max-w-lg mx-auto mt-24">
-   
-    @if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-        <strong class="font-bold">Success!</strong>
-        <span class="block sm:inline">{{ session('success') }}</span>
+
+<div class="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+
+  <!-- Back -->
+  <a href="/listings/manage" class="inline-flex items-center space-x-2 text-gray-500 hover:text-gray-900 text-sm font-medium mb-8 group transition-colors">
+    <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+    <span>Back to Dashboard</span>
+  </a>
+
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <!-- Header -->
+    <div class="bg-brand-black px-8 py-6">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-brand-red rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-pen text-white"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-white">Edit Job Listing</h2>
+          <p class="text-gray-400 text-sm truncate max-w-xs">{{$listing->title}}</p>
+        </div>
+      </div>
     </div>
-    @endif
 
-    <header class="text-center">
-        <h2 class="text-2xl font-bold uppercase mb-1">
-            Edit the jobby
-        </h2>
-        <p class="mb-4">Edit : {{$listing->title}}</p>
-    </header>
+    <div class="p-8">
+      @if(session('success'))
+      <div class="flex items-center space-x-3 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6">
+        <i class="fa-solid fa-circle-check text-brand-green"></i>
+        <span class="font-medium text-sm">{{ session('success') }}</span>
+      </div>
+      @endif
 
-    <form method="POST" action="/listings/{{$listing->id}}" enctype="multipart/form-data">
+      <form method="POST" action="/listings/{{$listing->id}}" enctype="multipart/form-data" class="space-y-6">
         @csrf
-
         @method('PUT')
-        <div class="mb-6">
-            <label for="company" class="inline-block text-lg mb-2">Company/developer Name</label>
-            <input type="text" class="border border-gray-200 rounded p-2 w-full" name="company" value="{{$listing->company}}">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <!-- Company -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Company / Developer Name <span class="text-brand-red">*</span></label>
+            <input type="text" name="company" value="{{$listing->company}}"
+              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all">
             @error('company')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
             @enderror
-        </div>
+          </div>
 
-        <div class="mb-6">
-            <label for="title" class="inline-block text-lg mb-2">Jobby Title</label>
-            <input type="text" class="border border-gray-200 rounded p-2 w-full" name="title" placeholder="Example: Senior Laravel Developer" value="{{$listing->title}}">
+          <!-- Title -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Job Title <span class="text-brand-red">*</span></label>
+            <input type="text" name="title" value="{{$listing->title}}"
+              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all">
             @error('title')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
             @enderror
-        </div>
+          </div>
 
-        <div class="mb-6">
-            <label for="location" class="inline-block text-lg mb-2">Jobby Location</label>
-            <input type="text" class="border border-gray-200 rounded p-2 w-full" name="location" placeholder="Example: Remote, Rabat, etc" value="{{$listing->location}}">
+          <!-- Location -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Location</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <i class="fa-solid fa-location-dot text-gray-400 text-sm"></i>
+              </div>
+              <input type="text" name="location" value="{{$listing->location}}"
+                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all">
+            </div>
             @error('location')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
             @enderror
-        </div>
+          </div>
 
-        <div class="mb-6">
-            <label for="email" class="inline-block text-lg mb-2">Contact Email</label>
-            <input type="email" class="border border-gray-200 rounded p-2 w-full" name="email" value="{{$listing->email}}">
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Email</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <i class="fa-solid fa-envelope text-gray-400 text-sm"></i>
+              </div>
+              <input type="email" name="email" value="{{$listing->email}}"
+                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all">
+            </div>
             @error('email')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
             @enderror
+          </div>
         </div>
 
-        <div class="mb-6">
-            <label for="website" class="inline-block text-lg mb-2">Website/Application URL</label>
-            <input type="url" class="border border-gray-200 rounded p-2 w-full" name="website" value="{{$listing->website}}">
-            @error('website')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
+        <!-- Salary Range -->
+        @if($listing->type === 'job')
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Salary Range <span class="text-gray-400 font-normal text-xs">(optional — indicative)</span>
+          </label>
+          <div class="flex items-center gap-3">
+            <div class="relative flex-1">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm font-medium pointer-events-none">From</span>
+              <input type="number" name="salary_min" value="{{ $listing->salary_min }}" min="0"
+                class="w-full pl-14 pr-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all"
+                placeholder="5000">
+            </div>
+            <span class="text-gray-400 font-bold flex-shrink-0">–</span>
+            <div class="relative flex-1">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm font-medium pointer-events-none">To</span>
+              <input type="number" name="salary_max" value="{{ $listing->salary_max }}" min="0"
+                class="w-full pl-8 pr-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all"
+                placeholder="12000">
+            </div>
+            <span class="text-gray-400 text-sm font-medium flex-shrink-0">MAD/mo</span>
+          </div>
+        </div>
+        @endif
+
+        <!-- Website -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Website / Application URL</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <i class="fa-solid fa-globe text-gray-400 text-sm"></i>
+            </div>
+            <input type="url" name="website" value="{{$listing->website}}"
+              class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all">
+          </div>
+          @error('website')
+          <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
 
-        <div class="mb-6">
-            <label for="tags" class="inline-block text-lg mb-2">Tags (Comma Separated)</label>
-            <input type="text" class="border border-gray-200 rounded p-2 w-full" name="tags" placeholder="Example: Laravel, Backend, Postgres, etc" value="{{$listing->tags}}">
-            @error('tags')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
+        <!-- Tags -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Skills & Tags</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <i class="fa-solid fa-tags text-gray-400 text-sm"></i>
+            </div>
+            <input type="text" name="tags" value="{{$listing->tags}}"
+              class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all">
+          </div>
+          @error('tags')
+          <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
 
-        <div class="mb-6">
-            <label for="logo" class="inline-block text-lg mb-2">Company/Project Logo</label>
-            <input type="file" class="border border-gray-200 rounded p-2 w-full" name="logo">
+        <!-- Logo -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Update Logo</label>
+          <div class="flex items-center gap-4 mb-3">
             <img
-        class="hidden w-48 mr-6 md:block"
-        src="{{$listing->logo ? asset('storage/' . $listing->logo) : asset('/images/no-picture.png')}}"
-        alt="logo"
+              class="w-14 h-14 rounded-xl object-contain border border-gray-100 bg-gray-50 p-1"
+              src="{{$listing->logo ? asset('storage/' . $listing->logo) : asset('/images/no-picture.png')}}"
+              alt="Current logo"
             />
-            @error('logo')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
+            <div>
+              <p class="text-sm font-medium text-gray-700">Current logo</p>
+              <p class="text-xs text-gray-400">Upload a new file to replace it</p>
+            </div>
+          </div>
+          <input type="file" name="logo" class="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-brand-red hover:file:bg-red-100 cursor-pointer">
+          @error('logo')
+          <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
 
-        <div class="mb-6">
-            <label for="description" class="inline-block text-lg mb-2">Jobby Description</label>
-            <textarea class="border border-gray-200 rounded p-2 w-full" name="description" rows="10" placeholder="Include tasks, requirements, salary, etc">{{$listing->description}}</textarea>
-            @error('description')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
+        <!-- Description -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Job Description</label>
+          <textarea name="description" rows="8"
+            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-medium bg-gray-50 focus:bg-white transition-all resize-none">{{$listing->description}}</textarea>
+          @error('description')
+          <p class="text-brand-red text-xs mt-1.5 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
 
-        <div class="mb-6">
-            <button type="submit" class="bg-laravel text-white rounded py-2 px-4 hover:bg-black">Update jobby</button>
-            <a href="/" class="text-black ml-4"> Back </a>
+        <!-- Actions -->
+        <div class="flex items-center gap-4 pt-2">
+          <button type="submit" class="btn-green text-white font-bold px-8 py-3.5 rounded-xl flex items-center space-x-2">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>Save Changes</span>
+          </button>
+          <a href="/listings/manage" class="text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors">Cancel</a>
         </div>
-    </form>
+      </form>
+    </div>
+  </div>
 </div>
+
 @endsection

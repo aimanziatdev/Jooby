@@ -12,13 +12,21 @@ class ListingController extends Controller
 {
     public function index() {
         return view('listings.index', [
-            'listings' => Listing::latest()->filter(request(['tag', 'search']))->paginate(6)
+            'listings' => Listing::latest()->filter(request(['tag', 'search', 'type']))->paginate(6)
         ]);
     }
 
     public function show(Listing $listing) {
+        $myApplication = null;
+        if (auth()->check()) {
+            $myApplication = \App\Models\Application::where('listing_id', $listing->id)
+                ->where('user_id', auth()->id())
+                ->first();
+        }
+
         return view('listings.show', [
-            'listing' => $listing
+            'listing' => $listing,
+            'myApplication' => $myApplication,
         ]);
     }
 
@@ -41,8 +49,10 @@ class ListingController extends Controller
             $formFields['logo'] = $request->file('logo')->store('logos', 'public');
         }
 
-        // Set the user_id field with the authenticated user's ID
         $formFields['user_id'] = auth()->id();
+        $formFields['type'] = auth()->user()->isCompany() ? 'job' : 'hobby';
+        $formFields['salary_min'] = $request->salary_min ?: null;
+        $formFields['salary_max'] = $request->salary_max ?: null;
 
         Listing::create($formFields);
 
@@ -81,6 +91,9 @@ class ListingController extends Controller
 
             $formFields['logo'] = $request->file('logo')->store('logos', 'public');
         }
+
+        $formFields['salary_min'] = $request->salary_min ?: null;
+        $formFields['salary_max'] = $request->salary_max ?: null;
 
         $listing->update($formFields);
 
