@@ -4,8 +4,7 @@
   "functions": {
     "public/index.php": {
       "runtime": "php@8.2",
-      "memory": 1024,
-      "timeout": 60
+      "memory": 1024
     }
   },
   "routes": [
