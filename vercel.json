@@ -1,24 +1,37 @@
 {
   "version": 2,
+  "framework": "laravel",
+  "buildCommand": "composer install && npm install && npm run build",
+  "devCommand": "php artisan serve",
+  "outputDirectory": "public",
+  "installCommand": "composer install --no-interaction --prefer-dist --optimize-autoloader",
   "builds": [
     {
       "src": "public/index.php",
-      "use": "@vercel/php"
+      "use": "@vercel/php@^0.7.2"
     }
   ],
   "routes": [
     {
+      "src": "/storage/(.*)",
+      "dest": "/storage/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "public/index.php"
+      "dest": "/public/index.php"
     }
   ],
   "env": {
     "APP_ENV": "production",
-    "APP_DEBUG": "false"
+    "APP_DEBUG": "false",
+    "APP_NAME": "Jobby",
+    "LOG_CHANNEL": "stderr"
   },
   "functions": {
     "public/index.php": {
-      "runtime": "php@8.2"
+      "runtime": "php@8.2",
+      "memory": 1024,
+      "timeout": 60
     }
   }
 }
