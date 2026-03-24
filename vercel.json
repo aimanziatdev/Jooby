@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "framework": "laravel",
   "functions": {
     "public/index.php": {
       "runtime": "php@8.2",
